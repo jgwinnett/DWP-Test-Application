@@ -8,7 +8,8 @@ Task breakdown:
 
 1. Retrieve a list of people who live in London
 2. Retrieve a list of people whose coordinates are within 50 miles of London 
-3. Make 1) and 2) accessible via an API (combined as one result)
+3. Make 1) and 2) accessible via an API (combined as one result) (MVP hit)
+4. 
 
 ## Task 1 planning: 
 

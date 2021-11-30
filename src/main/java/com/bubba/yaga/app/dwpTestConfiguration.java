@@ -1,4 +1,4 @@
-package com.bubba.yaga;
+package com.bubba.yaga.app;
 
 import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;

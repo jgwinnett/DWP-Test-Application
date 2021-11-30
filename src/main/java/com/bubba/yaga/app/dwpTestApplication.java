@@ -1,4 +1,4 @@
-package com.bubba.yaga;
+package com.bubba.yaga.app;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
