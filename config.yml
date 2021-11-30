@@ -2,3 +2,11 @@ logging:
   level: INFO
   loggers:
     com.bubba.yaga: DEBUG
+
+jerseyClient:
+  minThreads: 1
+  maxThreads: 8
+  workQueueSize: 8
+  gzipEnabled: true
+  gzipEnabledForRequests: true
+  chunkedEncodingEnabled: true

@@ -4,7 +4,7 @@ import com.bubba.yaga.entity.User;
 
 import java.util.List;
 
-public interface bpdtsApi {
+public interface BpdtsApi {
 
     List<User> getUsersForCity(String city);
 
