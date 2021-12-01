@@ -3,6 +3,7 @@ package com.bubba.yaga.api;
 import com.bubba.yaga.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BpdtsApi {
 
@@ -10,5 +11,5 @@ public interface BpdtsApi {
 
     List<User> getAllUsers();
 
-    User getUserById(int id);
+    Optional<User> getUserById(int id);
 }
