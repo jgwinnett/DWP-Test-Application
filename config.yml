@@ -10,3 +10,6 @@ jerseyClient:
   gzipEnabled: true
   gzipEnabledForRequests: true
   chunkedEncodingEnabled: true
+
+bptdsApiConfig:
+  baseURL: https://bpdts-test-app.herokuapp.com

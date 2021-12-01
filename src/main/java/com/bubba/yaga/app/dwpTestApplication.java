@@ -1,5 +1,6 @@
 package com.bubba.yaga.app;
 
+import com.bubba.yaga.gateway.BptdsGateway;
 import io.dropwizard.Application;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.setup.Bootstrap;
@@ -21,16 +22,18 @@ public class dwpTestApplication extends Application<dwpTestConfiguration> {
     @Override
     public void initialize(final Bootstrap<dwpTestConfiguration> bootstrap) {
 
-
-
     }
 
     @Override
     public void run(final dwpTestConfiguration configuration,
                     final Environment environment) {
+
         // TODO: implement application
         final Client client = new JerseyClientBuilder(environment).using(configuration.getJerseyClientConfiguration())
                 .build(getName());
+
+        BptdsGateway gateway = new BptdsGateway(client, configuration.getBptdsApiConfig(), environment.getObjectMapper());
+        gateway.getUsersForCity("London");
     }
 
 }

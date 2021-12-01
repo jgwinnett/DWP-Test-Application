@@ -15,8 +15,7 @@ public class User {
     private Double longitude;
     private Optional<String> city;
 
-
-    public User(int id, String firstName, String lastName, String email, String ipAddress, Double latitude, Double longitude, Optional<String> city) {
+    public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") Double latitude, @JsonProperty("longitude") Double longitude, @JsonProperty("city") Optional<String> city) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
