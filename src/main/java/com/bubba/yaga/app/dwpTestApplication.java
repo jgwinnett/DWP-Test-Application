@@ -1,6 +1,8 @@
 package com.bubba.yaga.app;
 
+import com.bubba.yaga.config.dwpTestConfiguration;
 import com.bubba.yaga.gateway.BptdsGateway;
+import com.bubba.yaga.health.ConnectivityHealthCheck;
 import com.bubba.yaga.resources.UserInOrNearLondonResource;
 import com.bubba.yaga.service.UserInOrNearLondonService;
 import com.bubba.yaga.service.FilterUsersByProximityService;
@@ -48,6 +50,7 @@ public class dwpTestApplication extends Application<dwpTestConfiguration> {
         UserInOrNearLondonService userInOrNearLondonService = new UserInOrNearLondonService(gateway,filterUsersByProximityService);
 
         environment.jersey().register(new UserInOrNearLondonResource(userInOrNearLondonService));
+        environment.healthChecks().register("downstream_api", new ConnectivityHealthCheck(client, configuration.getBptdsApiConfig()));
     }
 
 }

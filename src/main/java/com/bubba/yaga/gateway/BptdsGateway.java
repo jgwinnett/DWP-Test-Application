@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -34,20 +33,20 @@ public class BptdsGateway implements BpdtsApi {
     }
 
     public List<User> getUsersForCity(String city) {
-        String jsonResponse = webTarget.path("city").path(city).path("users").request(MediaType.TEXT_PLAIN).get(String.class);
+        String jsonResponse = webTarget.path("city").path(city).path("users").request().get(String.class);
 
         return mapJsonResponseToListOfUsers(jsonResponse);
     };
 
     public List<User> getAllUsers() {
-        String jsonResponse = webTarget.path("users").request(MediaType.TEXT_PLAIN).get(String.class);
+        String jsonResponse = webTarget.path("users").request().get(String.class);
 
         return mapJsonResponseToListOfUsers(jsonResponse);
     }
 
     public Optional<UserWithCity> getUserById(int id) {
         try {
-            String jsonResponse = webTarget.path("user").path(Integer.toString(id)).request(MediaType.TEXT_PLAIN).get(String.class);
+            String jsonResponse = webTarget.path("user").path(Integer.toString(id)).request().get(String.class);
             return mapJsonResponseToUserWithCity(jsonResponse);
         } catch (NotFoundException e) {
             return Optional.empty();
