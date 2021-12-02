@@ -15,7 +15,7 @@ Task breakdown:
 
 If we're not validating the results then blindly return the downstream API results... but they're pretty suspect (see Random observations)
 
-Probably going to offer a 'tier list' of data trusting with options to cross-validate:
+--Probably going to offer a 'tier list' of data trusting with options to cross-validate:--
 
 E.g.
 Trust 'city' > 'Lat/Long' >  I.P
@@ -23,9 +23,11 @@ Allow requirement that city AND Lat/Long match
 
 Won't prioritise I.P data due to 'realistic' use cases like VPNs 
 
+Update 1: Upon closer inspection of the instructions it's more apparent that we should trust the 'city' data, then the co-ordinates, ignroe the I.P{. 
+
 ### Random observations
 
-* The City API Only returns results for 'London' -- case matters 
+* The City API Only returns results for 'London' not 'london' -- case matters 
 * None of the example results for city = London have an I.P lookup that matches the lat/long listed 
 * User (266)  with a Lat/Long that's definitely Near London (Loughton) has a city of "L’govskiy" ?? and an I.P lookup that resolves to Minnesota ?? 
 * User (322) with A Lat/Long that's sort of near London (~ 50 miles) has a city of "Rokiciny" (Poland), and an I.P lookup that resolves to Marseille...
@@ -46,6 +48,8 @@ Class GeoDistanceUtils
 
 looks perfect (and Apache, woo)
 
+--- API was changed radically in newer versions, choice is to pin at this major version or use another tool 
+
 https://github.com/JavadocMD/simplelatlng  may be okay 
 
 
@@ -61,6 +65,13 @@ Negative Lat means South
 
 A London longitude should be pretty close to 0
 A London latitude should be pretty close to ~51.5
+
+https://www.thoughtco.com/degree-of-latitude-and-longitude-distance-4070616 
+
+Each degree of latitude is approximately 69 miles (111 kilometers) apart.
+
+At 40 degrees north or south, the distance between a degree of longitude is 53 miles
+
 
 
 ## Available API reference 

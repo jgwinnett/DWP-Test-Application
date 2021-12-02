@@ -11,3 +11,10 @@ Health Check
 ---
 
 To see your applications health enter url `http://localhost:8081/healthcheck`
+
+
+
+## ATTRIBUTIONS:
+
+CITY to Lat/Long Databse provided by https://simplemaps.com/data/world-cities.  
+

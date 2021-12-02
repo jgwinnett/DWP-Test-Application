@@ -11,11 +11,11 @@ public class User {
     private String lastName;
     private String email;
     private String ipAddress;
-    private Double latitude;
-    private Double longitude;
+    private double latitude;
+    private double longitude;
     private Optional<String> city;
 
-    public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") Double latitude, @JsonProperty("longitude") Double longitude, @JsonProperty("city") Optional<String> city) {
+    public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") double latitude, @JsonProperty("longitude") double longitude, @JsonProperty("city") Optional<String> city) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -51,12 +51,12 @@ public class User {
     }
 
     @JsonProperty
-    public Double getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
     @JsonProperty
-    public Double getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
     @JsonProperty

@@ -33,7 +33,7 @@ public class dwpTestApplication extends Application<dwpTestConfiguration> {
                 .build(getName());
 
         BptdsGateway gateway = new BptdsGateway(client, configuration.getBptdsApiConfig(), environment.getObjectMapper());
-        gateway.getUsersForCity("London");
+
     }
 
 }

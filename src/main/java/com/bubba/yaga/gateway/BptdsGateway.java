@@ -45,7 +45,6 @@ public class BptdsGateway implements BpdtsApi {
     }
 
     public Optional<User> getUserById(int id) {
-
         try {
             String jsonResponse = webTarget.path("user").path(Integer.toString(id)).request(MediaType.TEXT_PLAIN).get(String.class);
             return mapJsonResponseToUser(jsonResponse);

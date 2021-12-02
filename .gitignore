@@ -2,3 +2,4 @@
 target/**
 dwp-test.iml
 dependency-reduced-pom.xml
+.attach**

@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static com.bubba.yaga.CommonTestData.*;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -38,12 +39,6 @@ public class BptdsGatewayTest {
     private ObjectMapper objectMapper = mock(ObjectMapper.class);
 
     private BptdsGateway underTest;
-
-    private final User expectedUserMaurise = new User(1, "Maurise", "Shieldon", "mshieldon0@squidoo.com", "192.57.232.111", 34.003135, -117.7228641, Optional.empty());
-    private final User expectedUserBendix = new User(2,"Bendix", "Halgarth", "bhalgarth1@timesonline.co.uk", "4.185.73.82", -2.9623869, 104.7399789, Optional.empty());
-
-
-
 
     @Nested
     @WireMockTest
@@ -62,7 +57,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMakeHTTPGetRequestWithPathSameAsCity() throws JsonProcessingException {
             stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             underTest.getUsersForCity(LONDON);
 
@@ -72,7 +67,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldReturnAListOfUsersIfResponseNotEmpty() throws JsonProcessingException {
             stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             List<User> usersForCity = underTest.getUsersForCity(LONDON);
 
@@ -92,12 +87,12 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMapJsonStringResponseIntoListOfUser() throws JsonProcessingException {
             stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             List<User> actual = underTest.getUsersForCity(LONDON);
 
             assertThat(actual).isInstanceOf(List.class);
-            assertThat(actual.get(0)).isEqualTo(expectedUserMaurise);
+            assertThat(actual.get(0)).isEqualTo(USER_MAURICE);
         }
 
         @Test
@@ -128,7 +123,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMakeHTTPGetRequestToUserPath() throws JsonProcessingException {
             stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise, expectedUserBendix ));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             underTest.getAllUsers();
 
@@ -138,7 +133,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldReturnAListOfUsers() throws JsonProcessingException {
             stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise, expectedUserBendix));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             List<User> actual = underTest.getAllUsers();
 
@@ -148,13 +143,13 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMapJsonStringResponseIntoListOfUser() throws JsonProcessingException {
             stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(expectedUserMaurise, expectedUserBendix));
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             List<User> actual = underTest.getAllUsers();
 
             assertThat(actual).isInstanceOf(List.class);
-            assertThat(actual.get(0)).isEqualTo(expectedUserMaurise);
-            assertThat(actual.get(1)).isEqualTo(expectedUserBendix);
+            assertThat(actual.get(0)).isEqualTo(USER_MAURICE);
+            assertThat(actual.get(1)).isEqualTo(USER_BENDIX);
         }
 
         @Test
@@ -181,12 +176,11 @@ public class BptdsGatewayTest {
             underTest  = new BptdsGateway(client, bptdsApiConfig, objectMapper);
         }
 
-        private final User expectedUserBendix = new User(3,"Meghan", "Southall", "msouthall2@ihg.com", "41.243.184.215", 15.45033, 44.12768, Optional.of("Qaryat al Qābil"));
 
         @Test
         public void shouldMakeHTTPGetRequestToUserForIdPath() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(expectedUserBendix);
+            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
 
             underTest.getUserById(3);
 
@@ -196,7 +190,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMapJsonStringResponseIntoOptionalUser() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(expectedUserBendix);
+            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
 
             Optional<User> actual = underTest.getUserById(3);
 
@@ -206,11 +200,11 @@ public class BptdsGatewayTest {
         @Test
         public void shouldReturnOptionalUserCorrespondingToId() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(expectedUserBendix);
+            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
 
             Optional<User> actual = underTest.getUserById(3);
 
-            assertThat(actual.get()).isEqualTo(expectedUserBendix);
+            assertThat(actual.get()).isEqualTo(USER_MEGHAN);
         }
 
         @Test
