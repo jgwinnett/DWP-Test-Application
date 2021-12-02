@@ -13,6 +13,16 @@ Health Check
 To see your applications health enter url `http://localhost:8081/healthcheck`
 
 
+## Test running
+
+### Integration
+
+mvn verify 
+
+Trying to run mvn integration-test directly will result in errors due to issues with jetty containers (see https://maven.apache.org/surefire/maven-failsafe-plugin/usage.html Using jetty and maven-failsafe-plugin)
+
+
+
 
 ## ATTRIBUTIONS:
 

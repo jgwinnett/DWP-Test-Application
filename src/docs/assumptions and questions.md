@@ -8,8 +8,6 @@ What is the source of the 'City' data? User input? Can it be a mistake?
 What representation of 'user' do they want returned?
     - 
 
-
-
 ## Confident in these assumptions: 
 
 1. A London longitude should be pretty close to 0 given it's a measurement based off of Greenwich 
@@ -22,6 +20,7 @@ What representation of 'user' do they want returned?
 2. Must pick an arbitrary(ish) co-ordinate for 'the centre of London' if going down co-ord route 
    - Used a static value from simple-maps dataset 
 3. ... or a ring for the outskirts (more work)
+4. For integration testing assume that emails are unique
 
 
 ## Assumptions to test:

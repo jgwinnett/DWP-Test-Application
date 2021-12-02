@@ -63,6 +63,26 @@
         <version>2.22.0</version>
       </plugin>
       <plugin>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>3.0.0-M5</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <failIfNoTests>true</failIfNoTests>
+          <testSourceDirectory>${project.basedir}/src/intTest</testSourceDirectory>
+          <includes>
+            <include>**/*</include>
+          </includes>
+          <excludes />
+        </configuration>
+      </plugin>
+      <plugin>
         <artifactId>maven-source-plugin</artifactId>
         <version>3.2.1</version>
         <executions>
