@@ -3,6 +3,7 @@ package com.bubba.yaga.gateway;
 import com.bubba.yaga.api.BpdtsApi;
 import com.bubba.yaga.config.BptdsApiConfig;
 import com.bubba.yaga.entity.User;
+import com.bubba.yaga.entity.UserWithCity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -44,10 +45,10 @@ public class BptdsGateway implements BpdtsApi {
         return mapJsonResponseToListOfUsers(jsonResponse);
     }
 
-    public Optional<User> getUserById(int id) {
+    public Optional<UserWithCity> getUserById(int id) {
         try {
             String jsonResponse = webTarget.path("user").path(Integer.toString(id)).request(MediaType.TEXT_PLAIN).get(String.class);
-            return mapJsonResponseToUser(jsonResponse);
+            return mapJsonResponseToUserWithCity(jsonResponse);
         } catch (NotFoundException e) {
             return Optional.empty();
         }
@@ -64,11 +65,11 @@ public class BptdsGateway implements BpdtsApi {
         }
         return listOfUsers;
     }
-    
-    private Optional<User> mapJsonResponseToUser(String jsonInput) {
-        Optional<User> user;
+
+    private Optional<UserWithCity> mapJsonResponseToUserWithCity(String jsonInput) {
+        Optional<UserWithCity> user;
         try {
-            user = Optional.of(objectMapper.readValue(jsonInput, User.class));
+            user = Optional.of(objectMapper.readValue(jsonInput, UserWithCity.class));
         } catch (IOException e) {
             LOGGER.error("Exception thrown while parsing json response - " + e);
             user = Optional.empty();

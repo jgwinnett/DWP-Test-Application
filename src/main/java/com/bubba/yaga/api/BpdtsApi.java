@@ -1,6 +1,7 @@
 package com.bubba.yaga.api;
 
 import com.bubba.yaga.entity.User;
+import com.bubba.yaga.entity.UserWithCity;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,5 +12,5 @@ public interface BpdtsApi {
 
     List<User> getAllUsers();
 
-    Optional<User> getUserById(int id);
+    Optional<UserWithCity> getUserById(int id);
 }

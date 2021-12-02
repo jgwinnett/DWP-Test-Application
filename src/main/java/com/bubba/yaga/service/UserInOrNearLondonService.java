@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ApiService {
+public class UserInOrNearLondonService {
 
     private final BptdsGateway gateway;
     private final FilterUsersByProximityService filterUsersByProximityService;
 
     private static final String LONDON = "London";
 
-    public ApiService(BptdsGateway gateway, FilterUsersByProximityService filterUsersByProximityService) {
+    public UserInOrNearLondonService(BptdsGateway gateway, FilterUsersByProximityService filterUsersByProximityService) {
         this.gateway = gateway;
         this.filterUsersByProximityService = filterUsersByProximityService;
     }
@@ -32,12 +32,10 @@ public class ApiService {
     }
 
     public List<User> getUsersWhoLiveInLondon() {
-
         return gateway.getUsersForCity(LONDON);
     }
 
     public List<User> getUsersWhoLiveNearLondon() {
-
         List<User> allUsers = gateway.getAllUsers();
 
         return allUsers.stream()

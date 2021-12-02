@@ -2,8 +2,6 @@ package com.bubba.yaga.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.Optional;
-
 public class User {
 
     private int id;
@@ -13,9 +11,8 @@ public class User {
     private String ipAddress;
     private double latitude;
     private double longitude;
-    private Optional<String> city;
 
-    public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") double latitude, @JsonProperty("longitude") double longitude, @JsonProperty("city") Optional<String> city) {
+    public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") double latitude, @JsonProperty("longitude") double longitude) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -23,7 +20,6 @@ public class User {
         this.ipAddress = ipAddress;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.city = city;
     }
 
     @JsonProperty
@@ -58,9 +54,5 @@ public class User {
     @JsonProperty
     public double getLongitude() {
         return longitude;
-    }
-    @JsonProperty
-    public Optional<String> getCity() {
-        return city;
     }
 }

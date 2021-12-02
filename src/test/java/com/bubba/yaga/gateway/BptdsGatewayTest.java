@@ -2,6 +2,7 @@ package com.bubba.yaga.gateway;
 
 import com.bubba.yaga.config.BptdsApiConfig;
 import com.bubba.yaga.entity.User;
+import com.bubba.yaga.entity.UserWithCity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.bubba.yaga.CommonTestData.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -176,11 +178,10 @@ public class BptdsGatewayTest {
             underTest  = new BptdsGateway(client, bptdsApiConfig, objectMapper);
         }
 
-
         @Test
         public void shouldMakeHTTPGetRequestToUserForIdPath() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
             underTest.getUserById(3);
 
@@ -190,9 +191,9 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMapJsonStringResponseIntoOptionalUser() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
-            Optional<User> actual = underTest.getUserById(3);
+            Optional<UserWithCity> actual = underTest.getUserById(3);
 
             assertThat(actual).isInstanceOf(Optional.class);
         }
@@ -200,9 +201,9 @@ public class BptdsGatewayTest {
         @Test
         public void shouldReturnOptionalUserCorrespondingToId() throws JsonProcessingException {
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
-            Optional<User> actual = underTest.getUserById(3);
+            Optional<UserWithCity> actual = underTest.getUserById(3);
 
             assertThat(actual.get()).isEqualTo(USER_MEGHAN);
         }
@@ -211,7 +212,7 @@ public class BptdsGatewayTest {
         public void shouldReturnEmptyOptionalAndNotCallParserIfResponseStatusIs404()  {
             stubFor(get("/user/3").willReturn(status(404)));
 
-            Optional<User> actual = underTest.getUserById(3);
+            Optional<UserWithCity> actual = underTest.getUserById(3);
 
             assertThat(actual).isEmpty();
             verifyNoInteractions(objectMapper);
@@ -223,7 +224,7 @@ public class BptdsGatewayTest {
         public void shouldLogErrorAndReturnEmptyOptionalIfObjectMapperReadValueThrowsException() throws IOException {
             LogCaptor logCaptor = LogCaptor.forClass(BptdsGateway.class);
             stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(User.class))).thenAnswer( invocation-> {throw new IOException("Error processing JSON");});
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenAnswer( invocation-> {throw new IOException("Error processing JSON");});
 
             underTest.getUserById(3);
 

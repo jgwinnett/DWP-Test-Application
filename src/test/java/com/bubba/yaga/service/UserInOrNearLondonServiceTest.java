@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ApiServiceTest {
+public class UserInOrNearLondonServiceTest {
 
     private static final String LONDON = "London";
 
@@ -29,7 +29,7 @@ public class ApiServiceTest {
     private FilterUsersByProximityService filterUsersByProximityService;
 
     @InjectMocks
-    private ApiService underTest;
+    private UserInOrNearLondonService underTest;
 
     @Nested
     class getUsersWhoLiveInCityTests {

@@ -4,6 +4,9 @@
 ## Questions
 
 What is the source of the 'City' data? User input? Can it be a mistake? 
+    A: Instructions say to trust it
+What representation of 'user' do they want returned?
+    - 
 
 
 
@@ -17,6 +20,7 @@ What is the source of the 'City' data? User input? Can it be a mistake?
 
 
 2. Must pick an arbitrary(ish) co-ordinate for 'the centre of London' if going down co-ord route 
+   - Used a static value from simple-maps dataset 
 3. ... or a ring for the outskirts (more work)
 
 
