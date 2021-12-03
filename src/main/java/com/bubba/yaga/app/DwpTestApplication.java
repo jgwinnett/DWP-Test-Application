@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 
-public class dwpTestApplication extends Application<dwpTestConfiguration> {
+public class DwpTestApplication extends Application<dwpTestConfiguration> {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(dwpTestApplication.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(DwpTestApplication.class);
 
     public static void main(final String[] args) throws Exception {
-        new dwpTestApplication().run(args);
+        new DwpTestApplication().run(args);
     }
 
     @Override

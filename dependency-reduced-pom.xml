@@ -252,7 +252,7 @@
   </dependencyManagement>
   <properties>
     <dropwizard.version>2.0.25</dropwizard.version>
-    <mainClass>com.bubba.yaga.app.dwpTestApplication</mainClass>
+    <mainClass>com.bubba.yaga.app.DwpTestApplication</mainClass>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
   </properties>
