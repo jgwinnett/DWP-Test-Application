@@ -6,27 +6,28 @@ import com.bubba.yaga.entity.UserWithCity;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
-import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Answers;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static com.bubba.yaga.CommonTestData.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.verify;
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
@@ -34,41 +35,53 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class BptdsGatewayTest {
 
-    private WireMock wiremock;
 
-    private Client client = ClientBuilder.newClient();
-    private BptdsApiConfig bptdsApiConfig = mock(BptdsApiConfig.class);
-    private ObjectMapper objectMapper = mock(ObjectMapper.class);
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private Client client;
+    @Mock
+    private BptdsApiConfig bptdsApiConfig;
+    @Mock
+    private ObjectMapper objectMapper;
+    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
+    private WebTarget webtarget;
 
+    @InjectMocks
     private BptdsGateway underTest;
 
     @Nested
-    @WireMockTest
     class getUsersForCityTests {
 
         private static final String LONDON = "London";
 
         @BeforeEach
-        public void setup(WireMockRuntimeInfo wmRuntimeInfo) {
-            when(bptdsApiConfig.getBaseURL()).thenReturn(wmRuntimeInfo.getHttpBaseUrl());
-
-            wiremock = wmRuntimeInfo.getWireMock();
-            underTest  = new BptdsGateway(client, bptdsApiConfig, objectMapper);
+        public void setup() {
+            Mockito.reset();
+            when(bptdsApiConfig.getBaseURL()).thenReturn("localhost");
+            when(client.target(anyString())).thenReturn(webtarget);
+            underTest = new BptdsGateway(client, bptdsApiConfig, objectMapper);
         }
 
         @Test
-        public void shouldMakeHTTPGetRequestWithPathSameAsCity() throws JsonProcessingException {
-            stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
+        public void shouldUseCityArgumentWithinPath() throws JsonProcessingException {
+            WebTarget webTargetCityPath = mock(WebTarget.class, RETURNS_DEEP_STUBS);
+            WebTarget webTargetLondon = mock(WebTarget.class, RETURNS_DEEP_STUBS);
+
+            when(webtarget.path(anyString())).thenReturn(webTargetCityPath);
+            when(webTargetCityPath.path(anyString())).thenReturn(webTargetLondon);
+
+            when(webTargetLondon.path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             underTest.getUsersForCity(LONDON);
 
-            verify(getRequestedFor(urlEqualTo("/city/London/users")));
+            verify(webtarget).path("city");
+            verify(webTargetCityPath).path(LONDON);
+            verify(webTargetLondon).path("users");
         }
 
         @Test
         public void shouldReturnAListOfUsersIfResponseNotEmpty() throws JsonProcessingException {
-            stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
+            when(webtarget.path(anyString()).path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             List<User> usersForCity = underTest.getUsersForCity(LONDON);
@@ -78,7 +91,7 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldReturnAnEmptyListIfResponseEmpty() throws JsonProcessingException {
-            stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("empty.json")));
+            when(webtarget.path(anyString()).path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(Collections.emptyList());
 
             List<User> usersForCity = underTest.getUsersForCity(LONDON);
@@ -88,7 +101,7 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldMapJsonStringResponseIntoListOfUser() throws JsonProcessingException {
-            stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
+            when(webtarget.path(anyString()).path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE));
 
             List<User> actual = underTest.getUsersForCity(LONDON);
@@ -99,10 +112,11 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldLogErrorIfObjectMapperReadValueThrowsException() throws IOException {
-
             LogCaptor logCaptor = LogCaptor.forClass(BptdsGateway.class);
-            stubFor(get("/city/London/users").willReturn(aResponse().withBodyFile("cityLondonFound.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenAnswer( invocation-> {throw new IOException("Error processing JSON");});
+            when(webtarget.path(anyString()).path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenAnswer(invocation -> {
+                throw new IOException("Error processing JSON");
+            });
 
             underTest.getUsersForCity(LONDON);
 
@@ -111,30 +125,33 @@ public class BptdsGatewayTest {
     }
 
     @Nested
-    @WireMockTest
     class getAllUsersTests {
 
         @BeforeEach
-        public void setup(WireMockRuntimeInfo wmRuntimeInfo) {
-            when(bptdsApiConfig.getBaseURL()).thenReturn(wmRuntimeInfo.getHttpBaseUrl());
-
-            wiremock = wmRuntimeInfo.getWireMock();
-            underTest  = new BptdsGateway(client, bptdsApiConfig, objectMapper);
+        public void setup() {
+            Mockito.reset();
+            when(bptdsApiConfig.getBaseURL()).thenReturn("localhost");
+            when(client.target(anyString())).thenReturn(webtarget);
+            underTest = new BptdsGateway(client, bptdsApiConfig, objectMapper);
         }
 
         @Test
         public void shouldMakeHTTPGetRequestToUserPath() throws JsonProcessingException {
-            stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
+            WebTarget userPath = mock(WebTarget.class, RETURNS_DEEP_STUBS);
+
+            when(webtarget.path(anyString())).thenReturn(userPath);
+            when(userPath.request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             underTest.getAllUsers();
 
-            verify(getRequestedFor(urlEqualTo("/users")));
+            verify(webtarget).path("users");
+
         }
 
         @Test
         public void shouldReturnAListOfUsers() throws JsonProcessingException {
-            stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
+            when(webtarget.path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             List<User> actual = underTest.getAllUsers();
@@ -144,7 +161,7 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldMapJsonStringResponseIntoListOfUser() throws JsonProcessingException {
-            stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
+            when(webtarget.path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenReturn(List.of(USER_MAURICE, USER_BENDIX));
 
             List<User> actual = underTest.getAllUsers();
@@ -157,8 +174,10 @@ public class BptdsGatewayTest {
         @Test
         public void shouldLogErrorIfObjectMapperReadValueThrowsException() throws IOException {
             LogCaptor logCaptor = LogCaptor.forClass(BptdsGateway.class);
-            stubFor(get("/users").willReturn(aResponse().withBodyFile("users.json")));
-            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenAnswer( invocation-> {throw new IOException("Error processing JSON");});
+            when(webtarget.path(anyString()).request().get(eq(String.class))).thenReturn("{}");
+            when(objectMapper.readValue(anyString(), Mockito.<TypeReference<List<User>>>any())).thenAnswer(invocation -> {
+                throw new IOException("Error processing JSON");
+            });
 
             underTest.getAllUsers();
 
@@ -167,30 +186,37 @@ public class BptdsGatewayTest {
     }
 
     @Nested
-    @WireMockTest
     class getUserByIdTests {
 
         @BeforeEach
-        public void setup(WireMockRuntimeInfo wmRuntimeInfo) {
-            when(bptdsApiConfig.getBaseURL()).thenReturn(wmRuntimeInfo.getHttpBaseUrl());
-
-            wiremock = wmRuntimeInfo.getWireMock();
-            underTest  = new BptdsGateway(client, bptdsApiConfig, objectMapper);
+        public void setup() {
+            Mockito.reset();
+            when(bptdsApiConfig.getBaseURL()).thenReturn("localhost");
+            when(client.target(anyString())).thenReturn(webtarget);
+            underTest = new BptdsGateway(client, bptdsApiConfig, objectMapper);
         }
 
         @Test
         public void shouldMakeHTTPGetRequestToUserForIdPath() throws JsonProcessingException {
-            stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
+            final int id = 3;
+
+            WebTarget userPath = mock(WebTarget.class);
+            WebTarget userIdPath = mock(WebTarget.class, RETURNS_DEEP_STUBS);
+
+            when(webtarget.path(anyString())).thenReturn(userPath);
+            when(userPath.path(anyString())).thenReturn(userIdPath);
+            when(userIdPath.request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
-            underTest.getUserById(3);
+            underTest.getUserById(id);
 
-            verify(getRequestedFor(urlEqualTo("/user/3")));
+            verify(webtarget).path("user");
+            verify(userPath).path(Integer.toString(id));
         }
 
         @Test
         public void shouldMapJsonStringResponseIntoOptionalUser() throws JsonProcessingException {
-            stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
+            when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
             Optional<UserWithCity> actual = underTest.getUserById(3);
@@ -200,7 +226,7 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldReturnOptionalUserCorrespondingToId() throws JsonProcessingException {
-            stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
+            when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
             when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
 
             Optional<UserWithCity> actual = underTest.getUserById(3);
@@ -209,8 +235,8 @@ public class BptdsGatewayTest {
         }
 
         @Test
-        public void shouldReturnEmptyOptionalAndNotCallParserIfResponseStatusIs404()  {
-            stubFor(get("/user/3").willReturn(status(404)));
+        public void shouldReturnEmptyOptionalAndNotCallParserIfResponseStatusIs404() {
+            when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenThrow(new NotFoundException());
 
             Optional<UserWithCity> actual = underTest.getUserById(3);
 
@@ -218,22 +244,18 @@ public class BptdsGatewayTest {
             verifyNoInteractions(objectMapper);
         }
 
-
-
         @Test
         public void shouldLogErrorAndReturnEmptyOptionalIfObjectMapperReadValueThrowsException() throws IOException {
             LogCaptor logCaptor = LogCaptor.forClass(BptdsGateway.class);
-            stubFor(get("/user/3").willReturn(aResponse().withBodyFile("userById.json")));
-            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenAnswer( invocation-> {throw new IOException("Error processing JSON");});
+            when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenAnswer(invocation -> {
+                throw new IOException("Error processing JSON");
+            });
 
             underTest.getUserById(3);
 
             assertThat(logCaptor.getErrorLogs()).containsExactly("Exception thrown while parsing json response - java.io.IOException: Error processing JSON");
         }
-
     }
-
-    @Test
-    public void getUserByIdShouldReturnTheCorrelatedUser() {}
-
 }
+
