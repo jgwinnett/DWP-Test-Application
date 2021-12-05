@@ -12,9 +12,11 @@ Requirements:
 
 ### Get code + Installation 
 
-From the repository you are reading this (presumably Github) copy the repository code URL (i.e. `https://github.com/bubbayaga/dwp-test.git`) and `git clone $url` onto your machine.
+From the repository you are reading this (presumably Github) copy the repository code URL (i.e. `https://github.com/jgwinnett/DWP-Test-Application.git`) and `git clone $url` onto your machine.
 
 To install the application ensure you are within the cloned directory and run `mvn clean install` 
+
+If you fall afoul of DWP VPN shenanigans and are unable to install due to `dependency-check` failing to retrieve NVD databases run you can skip the dependency-check - `mvn clean install -Ddependency-check.skip=true`
 
 ### Starting the application 
 
@@ -68,7 +70,7 @@ Example invocation: `curl -X GET http://localhost:8081/healthcheck`
 
 Unit tests can be run with `mvn test`
 
-Integration tests can be run with `mvn verify`
+Integration tests can be run with `mvn verify` (use the `-Ddependency-check.skip=true` option if your VPN doesn't allow NVD downloads)
 
 Both are automatically ran when `mvn install` is invoked. 
 
