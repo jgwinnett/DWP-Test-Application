@@ -26,9 +26,10 @@ What representation of 'user' do they want returned?
 ## Assumptions to test:
 
 1. All data other than Long + Lat are consistent types 
+    - Serialisation int test seems to indicate that there are no other problems (and that the inconsistent data is parsed fine) 
 2. That results of {city} API are correct 
    * Most of the results from a London lookup are an awful long way away... 
-
+   * But going with a strict reading of the instructions. 
 
 ## Gotchas to be aware of: 
 

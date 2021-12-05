@@ -20,7 +20,7 @@ public class FilterUsersByProximityService {
     }
 
     public double getDistanceToLondon(double userLat, double userLong ) {
-        LatLng userLatLng = convertToLatLng(userLat,userLong);
+        LatLng userLatLng = toLatLng(userLat,userLong);
         double distanceToLondon = LatLngTool.distance(userLatLng, LONDON_LAT_LONG, LengthUnit.MILE);
         return roundToOneDecimalPoint(distanceToLondon);
     }
@@ -29,7 +29,7 @@ public class FilterUsersByProximityService {
         return new BigDecimal(value).setScale(1, RoundingMode.HALF_UP).doubleValue();
     }
 
-    private LatLng convertToLatLng(double lat, double lng) {
+    private LatLng toLatLng(double lat, double lng) {
         return new LatLng(lat, lng);
     }
 }

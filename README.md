@@ -1,6 +1,6 @@
 ## DWP Test application 
 
-ADemo app following the instruction to: 
+A Demo app with a minimal(ish) solution to the follow instruction: 
 
 >Build an API which calls this API, and returns people who are listed as either living in London, or whose current coordinates are within 50 miles of London. Push the answer to Github, and send us a link.
 
@@ -33,6 +33,8 @@ You can skip manually adding an application config by trying to run the applicat
 
 Upon starting the application the following endpoints will be exposed on `localhost:8080`:
 
+---
+
 #### `/users/InOrNearLondon`
  
 Request Parameters: None
@@ -62,15 +64,29 @@ Both are automatically ran when `mvn install` is invoked.
 
 ### Documentation links:
 
-For the rough planning notes drawn up in initial ideation refer to [planning_nodes](src/docs/planning_notes.md) 
+For possible improvements and speculation on their implementation refer to [improvements](src/docs/improvements.md)
+
+For the rough planning notes drawn up in initial ideation refer to [planning notes](src/docs/planning_notes.md) 
 
 For 'assumptions and questions' formulated while implementing refer to [assumptions and questions](src/docs/assumptions%20and%20questions.md)
 
 For 'why the flip' explanations of some choices refer to [wtf](src/docs/wtf.md)
 
-For possible improvements and speculation on their implementation refer to [improvements](src/docs/improvements.md)
+### Dependencies 
+
+A full list of dependencies can be found in the [pom.xml](pom.xml) but highlights include:
+
+Dev:
+* [Dropwizard](www.dropwizard.io) - framework for creation of RESTFUL APIs
+* [simplelatlng](https://github.com/JavadocMD/simplelatlng) - A lightweight library for determining distance between coordinates using the Haversine formula and a mean earth radius of 6371.009km
+Test:
+* [Junit5](https://junit.org/junit5/docs/current/user-guide/) - Unit testing framework
+* [assertj](https://assertj.github.io/doc/) - fluent assertion library
+* [logcaptor](https://github.com/Hakky54/log-captor) - a library for easily intercepting and asserting Log values without having to mess around with Mockito's static mocking
 
 ## ATTRIBUTIONS:
 
-CITY to Lat/Long Databse provided by https://simplemaps.com/data/world-cities.  
+CITY to Lat/Long dataset provided by https://simplemaps.com/data/world-cities. Ended up unused but I did use their coordinate for London. 
+
+Initially developed on Manjaro Linux i3 21.1.6.2, with additional train-based development and validation on macO Big Sur 11.6.
 
