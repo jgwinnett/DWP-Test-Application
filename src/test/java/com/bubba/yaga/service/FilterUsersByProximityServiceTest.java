@@ -15,25 +15,20 @@ public class FilterUsersByProximityServiceTest {
 
     private FilterUsersByProximityService underTest = new FilterUsersByProximityService();
 
-    private static final double LUTON_LAT = 51.8787;
-    private static final double LUTON_LONG = -0.4200;
-
-    private static final double LEEDS_LAT = 53.8008;
-    private static final double LEEDS_LONG = -1.5491;
-
     @Nested
     public class getDistanceTests {
 
-        @Test
-        public void shouldReturnADouble() {
-            double actual = underTest.getDistanceToLondon(LUTON_LAT, LUTON_LONG);
+        @ParameterizedTest
+        @MethodSource("com.bubba.yaga.service.FilterUsersByProximityServiceTest#latLong")
+        public void shouldReturnADouble(double lat, double lng) {
+            double actual = underTest.getDistanceToLondon(lat, lng);
 
             assertThat(actual).isInstanceOf(Double.class);
         }
 
         @ParameterizedTest
         @MethodSource("com.bubba.yaga.service.FilterUsersByProximityServiceTest#latLong")
-        public void shouldReturnADoubleWithWholeNumber(double lat, double lng) {
+        public void shouldReturnADoubleWithOneDecimalPlace(double lat, double lng) {
             double actual = underTest.getDistanceToLondon(lat, lng);
 
             assertThat(Double.toString(actual).split("\\.")[1]).hasSize(1);
@@ -41,7 +36,7 @@ public class FilterUsersByProximityServiceTest {
 
         @ParameterizedTest
         @MethodSource("com.bubba.yaga.service.FilterUsersByProximityServiceTest#latLongKnownDistanceBetween")
-        public void shouldReturnDistanceBetweenCoordinates(double lat, double lng, double distance) {
+        public void shouldReturnADistanceBetweenCoordinates(double lat, double lng, double distance) {
             double actual = underTest.getDistanceToLondon(lat, lng);
 
             assertThat(actual).isEqualTo(distance);
@@ -53,16 +48,15 @@ public class FilterUsersByProximityServiceTest {
 
         @ParameterizedTest
         @MethodSource("com.bubba.yaga.service.FilterUsersByProximityServiceTest#latLong")
-        public void shouldReturnBoolean() {
-            boolean actual = underTest.isWithin50MilesOfLondon(LUTON_LAT, LUTON_LONG);
+        public void shouldReturnBoolean(double lat, double lng) {
+            boolean actual = underTest.isWithin50MilesOfLondon(lat, lng);
 
             assertThat(actual).isInstanceOf(Boolean.class);
         }
 
         @ParameterizedTest
         @MethodSource("com.bubba.yaga.service.FilterUsersByProximityServiceTest#latLongWithin50Miles")
-        public void shouldReturnTrueForCoordinatesWithin50Miles(double lat, double lng, boolean bool) {
-
+        public void shouldReturnBooleanForCoordinatesWithin50Miles(double lat, double lng, boolean bool) {
             boolean actual = underTest.isWithin50MilesOfLondon(lat, lng);
 
             assertThat(actual).isEqualTo(bool);
