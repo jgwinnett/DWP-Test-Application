@@ -10,6 +10,6 @@ I initially wrote the gateway test using Wiremock but [fell afoul of this longst
 
 ## Why a relatively unknown Geocode library (simplelatlng)
 
-While there were plenty of examples of implementable algorithms around the internet I didn't want to spend unnecessary time writing tests and generally validating correctness when someone else has already put the work in to provide something that is 'good enough' for the purpose. It being entirel offline (rather than offered as part of a paid for API) was also a strong determining factor. 
+While there were plenty of examples of implementable algorithms around the internet I didn't want to spend unnecessary time writing tests and generally validating correctness when someone else has already put the work in to provide something that is 'good enough' for the purpose. It being entirely offline (rather than offered as part of a paid for API) was also a strong determining factor. 
 
 I did in my [planning_nodes](planning_notes.md) speculate about using Apache Lucene but the API I used was radically altered in subsequent release versions and I prefer not to pin myself to an old version if possible (for security / vulnerability reasons in particular)

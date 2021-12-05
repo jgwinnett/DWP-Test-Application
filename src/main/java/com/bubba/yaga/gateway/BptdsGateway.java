@@ -25,11 +25,12 @@ public class BptdsGateway implements BpdtsApi {
     private final BptdsApiConfig config;
     private final WebTarget webTarget;
     private final ObjectMapper objectMapper;
+
     public BptdsGateway(Client client, BptdsApiConfig config, ObjectMapper objectMapper) {
         this.client = client;
         this.config = config;
         this.objectMapper = objectMapper;
-        this.webTarget = client.target(config.getBaseURL());
+        this.webTarget = parseConfig(config);
     }
 
     public List<User> getUsersForCity(String city) {
@@ -74,5 +75,9 @@ public class BptdsGateway implements BpdtsApi {
             user = Optional.empty();
         }
         return user;
+    }
+
+    private WebTarget parseConfig(BptdsApiConfig config) {
+        return client.target(config.getBaseURL());
     }
 }

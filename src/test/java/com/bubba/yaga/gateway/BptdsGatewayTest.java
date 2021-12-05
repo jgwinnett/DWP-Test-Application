@@ -203,7 +203,7 @@ public class BptdsGatewayTest {
 
         @Test
         public void shouldMakeHTTPGetRequestToUserForIdPath() throws JsonProcessingException {
-            final int id = 3;
+            final int id = USER_MEGHAN_CITY.getId();
 
             WebTarget userPath = mock(WebTarget.class);
             WebTarget userIdPath = mock(WebTarget.class, RETURNS_DEEP_STUBS);
@@ -243,7 +243,7 @@ public class BptdsGatewayTest {
         public void shouldReturnEmptyOptionalAndNotCallParserIfResponseStatusIs404() {
             when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenThrow(new NotFoundException());
 
-            Optional<UserWithCity> actual = underTest.getUserById(3);
+            Optional<UserWithCity> actual = underTest.getUserById(1);
 
             assertThat(actual).isEmpty();
             verifyNoInteractions(objectMapper);
@@ -257,7 +257,7 @@ public class BptdsGatewayTest {
                 throw new IOException("Error processing JSON");
             });
 
-            underTest.getUserById(3);
+            underTest.getUserById(1);
 
             assertThat(logCaptor.getErrorLogs()).containsExactly("Exception thrown while parsing json response - java.io.IOException: Error processing JSON");
         }

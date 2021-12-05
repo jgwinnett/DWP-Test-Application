@@ -4,13 +4,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class User {
 
-    private int id;
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String ipAddress;
-    private double latitude;
-    private double longitude;
+    private final int id;
+    private final String firstName;
+    private final String lastName;
+    private final String email;
+    private final String ipAddress;
+    private final double latitude;
+    private final double longitude;
 
     public User(@JsonProperty("id") int id, @JsonProperty("first_name") String firstName, @JsonProperty("last_name") String lastName, @JsonProperty("email") String email, @JsonProperty("ip_address") String ipAddress, @JsonProperty("latitude") double latitude, @JsonProperty("longitude") double longitude) {
         this.id = id;

@@ -32,7 +32,7 @@ public class UserInOrNearLondonResourceTest {
     class getUsersTest {
 
         @Test
-        public void shouldCallService() {
+        public void shouldCallUserInOrNearLondonService() {
             try {
                 underTest.getUsersInOrNearLondon(false);
             } catch (WebApplicationException ignored) {
@@ -76,7 +76,7 @@ public class UserInOrNearLondonResourceTest {
         }
 
         @Test
-        public void shouldReturnSetUsersWithCityLocation() {
+        public void shouldReturnUserSetWithCityLocation() {
             when(userInOrNearLondonService.getUsersWhoLiveInOrNearLondon()).thenReturn(USER_SET);
             when(userInOrNearLondonService.getCityLocationForUsers(eq(USER_SET))).thenReturn(USER_SET_WITH_CITY);
 

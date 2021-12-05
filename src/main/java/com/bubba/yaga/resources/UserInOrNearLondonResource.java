@@ -28,8 +28,8 @@ public class UserInOrNearLondonResource implements UserInOrNearLondonApi {
     @Path("InOrNearLondon")
     @GET()
     public Set<User> getUsersInOrNearLondon(@DefaultValue("false") @QueryParam("withCity") boolean withCity) {
-
         Set<User> users = userInOrNearLondonService.getUsersWhoLiveInOrNearLondon();
+
         if(!users.isEmpty()) {
             if(withCity) {
                 return userInOrNearLondonService.getCityLocationForUsers(users);

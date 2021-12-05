@@ -48,7 +48,8 @@ public class UserInOrNearLondonService {
         Set<User> usersWithCity = new HashSet<>();
 
         users.forEach( user ->
-            gateway.getUserById(user.getId()).ifPresent(usersWithCity::add));
+            gateway.getUserById(user.getId()).ifPresent(usersWithCity::add)
+        );
 
         return usersWithCity;
     }

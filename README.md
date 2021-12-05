@@ -6,11 +6,15 @@ A Demo app with a minimal(ish) solution to the follow instruction:
 
 ## Usage
 
+Requirements:
+* Java 11 installed
+* A functional network connection. 
+
 ### Get code + Installation 
 
-From the repository you are reading this (presumably Github) copy the repository code URL (i.e. `https://github.com/bubbayaga/dwp-test.git`) and `git clone $url` onto your machine. 
+From the repository you are reading this (presumably Github) copy the repository code URL (i.e. `https://github.com/bubbayaga/dwp-test.git`) and `git clone $url` onto your machine.
 
-To install the application run `mvn clean install` 
+To install the application ensure you are within the cloned directory and run `mvn clean install` 
 
 ### Starting the application 
 
@@ -31,17 +35,17 @@ You can skip manually adding an application config by trying to run the applicat
 
 ### Using the app
 
-Upon starting the application the following endpoints will be exposed on `localhost:8080`:
+Upon starting the application the following endpoints will automatically be exposed on `localhost:8080`:
 
 ---
 
 #### GET `/users/InOrNearLondon?withCity=`
  
-Request Parameters: Optional Query Parameter `withCity`, default to false. 
+Request Parameters: Optional Query Parameter `withCity`, defaults to false. 
 
 Returns: 
     Default: a JSON response of `User`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275)
-    `withCity`=`True`: a JSON response of `UserWithCit` with same caveats as above. 
+    `withCity`=`True`: a JSON response of `UserWithCity` with same caveats as above. 
 
 Example invocation:
 
@@ -94,7 +98,7 @@ Test:
 
 ## ATTRIBUTIONS:
 
-CITY to Lat/Long dataset provided by https://simplemaps.com/data/world-cities. Ended up unused but I did use their coordinate for London. 
+CITY to Lat/Long dataset provided by https://simplemaps.com/data/world-cities. Dataset ended up not being used, but I did use their coordinate for 'London'. 
 
-Initially developed on Manjaro Linux i3 21.1.6.2, with additional train-based development and validation on macO Big Sur 11.6.
+Initially developed on Manjaro Linux i3 21.2.0, with additional train-based development and validation on macO Big Sur 11.6.
 

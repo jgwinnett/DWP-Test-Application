@@ -18,7 +18,7 @@ public class ConnectivityHealthCheck extends HealthCheck {
     }
 
     @Override
-    protected Result check() throws Exception {
+    protected Result check() {
 
         Response response = client.target(config.getBaseURL()).request().get();
 
@@ -27,6 +27,5 @@ public class ConnectivityHealthCheck extends HealthCheck {
         } else {
             return Result.unhealthy("Could not reach BPTDS API");
         }
-
     }
 }
