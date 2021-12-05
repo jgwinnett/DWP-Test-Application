@@ -1,7 +1,6 @@
 package com.bubba.yaga.service;
 
 import com.bubba.yaga.entity.User;
-import com.bubba.yaga.entity.UserWithCity;
 import com.bubba.yaga.gateway.BptdsGateway;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,11 +13,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static com.bubba.yaga.CommonTestData.*;
+import static com.bubba.yaga.CommonTestData.USERS_WITHOUT_CITY;
+import static com.bubba.yaga.CommonTestData.USER_BENDIX;
+import static com.bubba.yaga.CommonTestData.USER_MAURICE;
+import static com.bubba.yaga.CommonTestData.USER_MEGHAN;
+import static com.bubba.yaga.CommonTestData.USER_MEGHAN_CITY;
+import static com.bubba.yaga.CommonTestData.USER_SET_WITH_CITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserInOrNearLondonServiceTest {
@@ -121,20 +128,18 @@ public class UserInOrNearLondonServiceTest {
         public void shouldReturnAListOfUserWithCity() {
             when(gateway.getUserById(anyInt())).thenReturn(Optional.of(USER_MEGHAN_CITY));
 
-            List<UserWithCity> actual = underTest.getCityLocationForUsers(List.of(USER_MEGHAN));
+            Set<User> actual = underTest.getCityLocationForUsers(Set.of(USER_MEGHAN));
 
-            assertThat(actual).isInstanceOf(List.class);
+            assertThat(actual).isInstanceOf(Set.class);
         }
 
         @Test
         public void shouldUseGatewayGetByUserId() {
             when(gateway.getUserById(anyInt())).thenReturn(Optional.of(USER_MEGHAN_CITY));
 
-            underTest.getCityLocationForUsers(USERS_WITHOUT_CITY);
+            underTest.getCityLocationForUsers(USER_SET_WITH_CITY);
 
-            verify(gateway).getUserById(1);
-            verify(gateway).getUserById(2);
+            verify(gateway).getUserById(3);
         }
-
     }
 }

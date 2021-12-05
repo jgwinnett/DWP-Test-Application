@@ -24,5 +24,6 @@ public class CommonTestData {
     public static final List<UserWithCity> USERS_WITH_CITY = List.of(USER_MEGHAN_CITY);
 
     public static final Set<User> USER_SET = Set.of(USER_MAURICE, USER_BENDIX);
+    public static final Set<User> USER_SET_WITH_CITY = Set.of(USER_MEGHAN);
 
 }

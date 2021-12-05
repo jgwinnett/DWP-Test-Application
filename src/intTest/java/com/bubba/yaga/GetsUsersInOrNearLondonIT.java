@@ -16,7 +16,10 @@ import javax.ws.rs.client.ClientBuilder;
 import java.util.List;
 import java.util.Set;
 
-import static com.bubba.yaga.CommonTestData.*;
+import static com.bubba.yaga.CommonTestData.USER_IN_LONDON_BY_CITY;
+import static com.bubba.yaga.CommonTestData.USER_IN_LONDON_BY_COORDS;
+import static com.bubba.yaga.CommonTestData.USER_NOT_IN_LONDON_BY_CITY;
+import static com.bubba.yaga.CommonTestData.USER_NOT_IN_LONDON_BY_COORDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 

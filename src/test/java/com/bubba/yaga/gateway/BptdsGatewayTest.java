@@ -19,18 +19,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static com.bubba.yaga.CommonTestData.*;
+import static com.bubba.yaga.CommonTestData.USER_BENDIX;
+import static com.bubba.yaga.CommonTestData.USER_MAURICE;
+import static com.bubba.yaga.CommonTestData.USER_MEGHAN_CITY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class BptdsGatewayTest {

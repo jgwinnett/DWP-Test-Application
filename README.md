@@ -35,22 +35,19 @@ Upon starting the application the following endpoints will be exposed on `localh
 
 ---
 
-#### GET `/InOrNearLondon/users`
+#### GET `/users/InOrNearLondon?withCity=`
  
-Request Parameters: None
+Request Parameters: Optional Query Parameter `withCity`, default to false. 
 
-Returns: a JSON response of `User`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275)
+Returns: 
+    Default: a JSON response of `User`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275)
+    `withCity`=`True`: a JSON response of `UserWithCit` with same caveats as above. 
 
-Example invocation: `curl -X GET http://localhost:8080/InOrNearLondon/users`
+Example invocation:
 
-#### GET `/InOrNearLondon/usersWithCity`
-
-Request Parameters: None
-
-Returns: a JSON response of `UserWithCity`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275).
-Results determined by coordinate may not have a City value of London due to quirks in the downstream API's data. 
-
-Example invocation: `curl -X GET http://localhost:8080/InOrNearLondon/usersWithCity`
+ `User` output: `curl -X GET http://localhost:8080/users/InOrNearLondon`  
+ 
+ `UserWithCity` output: `curl -X GET 'http://localhost:8080/users/InOrNearLondon?withCity=true'`
 
 --- 
 Upon starting the application the following endpoints will be exposed on `localhost:8081`:
@@ -87,10 +84,12 @@ A full list of dependencies can be found in the [pom.xml](pom.xml) but highlight
 
 Dev:
 * [Dropwizard](www.dropwizard.io) - framework for creation of RESTFUL APIs
-* [simplelatlng](https://github.com/JavadocMD/simplelatlng) - A lightweight library for determining distance between coordinates using the Haversine formula and a mean earth radius of 6371.009km
+* [simplelatlng](https://github.com/JavadocMD/simplelatlng) - A lightweight library for determining distance between coordinates using the Haversine formula and a mean earth radius of 6371.009km  
+
 Test:
 * [Junit5](https://junit.org/junit5/docs/current/user-guide/) - Unit testing framework
 * [assertj](https://assertj.github.io/doc/) - fluent assertion library
+* [mockito](https://site.mockito.org/) - Java mocking framework 
 * [logcaptor](https://github.com/Hakky54/log-captor) - a library for easily intercepting and asserting Log values without having to mess around with Mockito's static mocking
 
 ## ATTRIBUTIONS:

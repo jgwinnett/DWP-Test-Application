@@ -1,10 +1,9 @@
 package com.bubba.yaga.service;
 
 import com.bubba.yaga.entity.User;
-import com.bubba.yaga.entity.UserWithCity;
 import com.bubba.yaga.gateway.BptdsGateway;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -45,8 +44,8 @@ public class UserInOrNearLondonService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserWithCity> getCityLocationForUsers(List<User> users) {
-        List<UserWithCity> usersWithCity = new ArrayList<>();
+    public Set<User> getCityLocationForUsers(Set<User> users) {
+        Set<User> usersWithCity = new HashSet<>();
 
         users.forEach( user ->
             gateway.getUserById(user.getId()).ifPresent(usersWithCity::add));
