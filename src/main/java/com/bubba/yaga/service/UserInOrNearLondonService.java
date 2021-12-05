@@ -1,8 +1,10 @@
 package com.bubba.yaga.service;
 
 import com.bubba.yaga.entity.User;
+import com.bubba.yaga.entity.UserWithCity;
 import com.bubba.yaga.gateway.BptdsGateway;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +43,15 @@ public class UserInOrNearLondonService {
         return allUsers.stream()
                 .filter(user -> filterByProximity(user.getLatitude(), user.getLongitude()) )
                 .collect(Collectors.toList());
+    }
+
+    public List<UserWithCity> getCityLocationForUsers(List<User> users) {
+        List<UserWithCity> usersWithCity = new ArrayList<>();
+
+        users.forEach( user ->
+            gateway.getUserById(user.getId()).ifPresent(usersWithCity::add));
+
+        return usersWithCity;
     }
 
     private boolean filterByProximity(double lat, double lng) {

@@ -206,7 +206,7 @@ public class BptdsGatewayTest {
             when(webtarget.path(anyString())).thenReturn(userPath);
             when(userPath.path(anyString())).thenReturn(userIdPath);
             when(userIdPath.request().get(eq(String.class))).thenReturn("{}");
-            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN_CITY);
 
             underTest.getUserById(id);
 
@@ -217,7 +217,7 @@ public class BptdsGatewayTest {
         @Test
         public void shouldMapJsonStringResponseIntoOptionalUser() throws JsonProcessingException {
             when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
-            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN_CITY);
 
             Optional<UserWithCity> actual = underTest.getUserById(3);
 
@@ -227,11 +227,11 @@ public class BptdsGatewayTest {
         @Test
         public void shouldReturnOptionalUserCorrespondingToId() throws JsonProcessingException {
             when(webtarget.path(anyString()).path(anyString()).request().get(eq(String.class))).thenReturn("{}");
-            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN);
+            when(objectMapper.readValue(anyString(), eq(UserWithCity.class))).thenReturn(USER_MEGHAN_CITY);
 
             Optional<UserWithCity> actual = underTest.getUserById(3);
 
-            assertThat(actual.get()).isEqualTo(USER_MEGHAN);
+            assertThat(actual.get()).isEqualTo(USER_MEGHAN_CITY);
         }
 
         @Test

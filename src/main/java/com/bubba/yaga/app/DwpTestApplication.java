@@ -25,7 +25,7 @@ public class DwpTestApplication extends Application<dwpTestConfiguration> {
 
     @Override
     public String getName() {
-        return "dwpTest";
+        return "DwpTest";
     }
 
     @Override

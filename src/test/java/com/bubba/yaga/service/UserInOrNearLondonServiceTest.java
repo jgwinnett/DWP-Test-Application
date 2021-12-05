@@ -1,6 +1,7 @@
 package com.bubba.yaga.service;
 
 import com.bubba.yaga.entity.User;
+import com.bubba.yaga.entity.UserWithCity;
 import com.bubba.yaga.gateway.BptdsGateway;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import static com.bubba.yaga.CommonTestData.*;
@@ -102,7 +104,7 @@ public class UserInOrNearLondonServiceTest {
         @Test
         public void shouldCombineInCityAndNearCityResults() {
             when(gateway.getAllUsers()).thenReturn(USERS_WITHOUT_CITY);
-            when(gateway.getUsersForCity(LONDON)).thenReturn(USERS_WITH_CITY);
+            when(gateway.getUsersForCity(LONDON)).thenReturn(List.of(USER_MEGHAN));
             when(filterUsersByProximityService.isWithin50MilesOfLondon(anyDouble(), anyDouble())).thenReturn(true);
 
             Set<User> actual = underTest.getUsersWhoLiveInOrNearLondon();
@@ -110,5 +112,29 @@ public class UserInOrNearLondonServiceTest {
             assertThat(actual.size()).isEqualTo(3);
             assertThat(actual).contains(USER_MAURICE, USER_BENDIX, USER_MEGHAN);
         }
+    }
+
+    @Nested
+    class getCityLocationForUsersTest {
+
+        @Test
+        public void shouldReturnAListOfUserWithCity() {
+            when(gateway.getUserById(anyInt())).thenReturn(Optional.of(USER_MEGHAN_CITY));
+
+            List<UserWithCity> actual = underTest.getCityLocationForUsers(List.of(USER_MEGHAN));
+
+            assertThat(actual).isInstanceOf(List.class);
+        }
+
+        @Test
+        public void shouldUseGatewayGetByUserId() {
+            when(gateway.getUserById(anyInt())).thenReturn(Optional.of(USER_MEGHAN_CITY));
+
+            underTest.getCityLocationForUsers(USERS_WITHOUT_CITY);
+
+            verify(gateway).getUserById(1);
+            verify(gateway).getUserById(2);
+        }
+
     }
 }

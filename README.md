@@ -35,18 +35,27 @@ Upon starting the application the following endpoints will be exposed on `localh
 
 ---
 
-#### `/users/InOrNearLondon`
+#### GET `/InOrNearLondon/users`
  
 Request Parameters: None
 
-Returns: a JSON response of `User`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275;)
+Returns: a JSON response of `User`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275)
 
-Example invocation: `curl -X GET http://localhost:8080/users/InOrNearLondon`
+Example invocation: `curl -X GET http://localhost:8080/InOrNearLondon/users`
+
+#### GET `/InOrNearLondon/usersWithCity`
+
+Request Parameters: None
+
+Returns: a JSON response of `UserWithCity`s who have a downstream `city` value of `London` or whose coordinates are within 50 miles of a predetermined coordinate value (51.5072, -0.1275).
+Results determined by coordinate may not have a City value of London due to quirks in the downstream API's data. 
+
+Example invocation: `curl -X GET http://localhost:8080/InOrNearLondon/usersWithCity`
 
 --- 
 Upon starting the application the following endpoints will be exposed on `localhost:8081`:
 
-#### `/healthcheck`
+#### GET `/healthcheck`
 
 Request Parameters: None
 
